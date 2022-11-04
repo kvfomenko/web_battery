@@ -30,67 +30,6 @@ function GetLevel(source, callback) {
 	});
 }
 
-/*
-var Ping = function(opt) {
-	this.opt = opt || {};
-	this.timeout = this.opt.timeout || timeout;
-	this.logError = this.opt.logError || false;
-};
-
-Ping.prototype.ping = function(source, callback) {
-	var self = this;
-	self.isDone = '';
-	//self.img = new Image();
-	//self.img.onload = onload;
-	//self.img.onerror = onerror;
-	self.battery_level = undefined;
-
-	var timer;
-	//var start = new Date();
-
-	function onload(e) {
-		if (!self.isDone) {
-			self.isDone = 'success';
-			self.battery_level = 0;
-			pingCheck.call(self, e);
-		}
-	}
-
-	function onerror(e) {
-		if (!self.isDone) {
-			self.isDone = 'error';
-			//console.error("onerror: " + JSON.stringify(e));
-			pingCheck.call(self, e);
-		}
-	}
-
-	timer = setTimeout(function() {
-		if (!self.isDone) {
-			self.isDone = 'timeout';
-			pingCheck.call(self, undefined);
-		}}, self.timeout);
-
-
-	function pingCheck() {
-		if (timer) { clearTimeout(timer); }
-		//var pong = new Date() - start;
-
-		if (typeof callback === "function") {
-			// When operating in timeout mode, the timeout callback doesn't pass [event] as e.
-			// Notice [this] instead of [self], since .call() was used with context
-			if (this.isDone === 'success') {
-				return callback(null, battery_level);
-			} else if (this.isDone === 'error') {
-				return callback('error', null);
-			} else {
-				return callback('timeout', null);
-			}
-		}
-	}
-
-	self.img.src = source + "?" + (+new Date()); // Trigger image load with cache buster
-};
-*/
 	function drawLine(ctx, level, position, height_graphic) {
 	  var is_charging = 1;
 	  if (level < 0) {
@@ -273,7 +212,7 @@ Ping.prototype.ping = function(source, callback) {
 		ctx.stroke();
 
 		ctx.font = "10px sans-serif";
-	    ctx.fillText(vertical_scale + ' %', width_graphic +5 +correction, 10 +correction);
+		ctx.fillText(vertical_scale + ' %', width_graphic +5 +correction, 10 +correction);
 		ctx.fillText(Math.round(vertical_scale/2) + ' %', width_graphic +5 +correction, Math.round(height_graphic/2) +correction);
 		ctx.fillText('0 %', width_graphic +5 +correction, height_graphic -5 +correction);
 
@@ -305,10 +244,6 @@ Ping.prototype.ping = function(source, callback) {
 
 		drawDL(ctx, width, height);
 	};
-
-//var data = localStorage.getItem('ping_Xalq_3sec');
-//localStorage.setItem('ping_Mig2_3sec', data);
-
 
 	function renderPingGraphic(name, imgsrc, ping_interval, width, height, rel_name) {
 		localStorage.setItem('bat_interval_' + name, ping_interval);
