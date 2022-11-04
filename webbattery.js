@@ -82,8 +82,8 @@ Ping.prototype.ping = function(source, callback) {
 	}
 
 	self.img.src = source + "?" + (+new Date()); // Trigger image load with cache buster
+;
 */
-};
 
 	function drawLine(ctx, ms, position, height_graphic) {
 	if (ms >= 0) {
