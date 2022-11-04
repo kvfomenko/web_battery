@@ -14,10 +14,14 @@ function GetLevel(source, callback) {
 		dataType: "json",
 		url: source + "?" + (+new Date()),
 		success: function(data) {
-			var res = JSON.parse(data.responseText);
 			console.log('data.responseText: ' + data.responseText);
-			if (typeof callback === "function") {
-				return callback(null, res.level);
+			if (data.responseText) {
+				var res = JSON.parse(data.responseText);
+				if (typeof callback === "function") {
+					return callback(null, res.level);
+				}
+			} else {
+				return callback('error', null);
 			}
 		},
 		error: function(e) {
@@ -140,8 +144,10 @@ function GetLevel(source, callback) {
 			var is_charging_agg = 0;
 			var count_i = Math.min(p.length-1, rel_rate);
 			for (var i = 0; i < count_i; i++) {
-				level_agg += Math.abs(p[i]);
-				is_charging_agg += Math.sign(p[i]);
+				if (p[i]) {
+					level_agg += Math.abs(p[i]);
+					is_charging_agg += Math.sign(p[i]);
+				}
 			}
 			var level = Math.round(level_agg / count_i,1);
 			var is_charging = Math.round(is_charging_agg / count_i,1);
