@@ -170,7 +170,7 @@ Ping.prototype.ping = function(source, callback) {
 			drawLine(ctx, p[i], width -width_timing -i, height -height_timing);
 		};
 		if (p.length > 0) {
-			$('#span_' + name).html(p[0] + 'ms');
+			$('#span_' + name).html(p[0] + '%');
 		}
 	}
 
@@ -197,7 +197,7 @@ Ping.prototype.ping = function(source, callback) {
 			var is_charging = Math.round(is_charging_agg / count_i,1);
 			if (is_charging <= 0) {level = -level};
 
-			//console.log(name + ' -> ' + ms);
+			//console.log(name + ' -> ' + level);
 			$('#span_' + name).html(level + '%');
 			savePing(name, level);
 			drawPing(ctx, level, width, height);
@@ -262,9 +262,9 @@ Ping.prototype.ping = function(source, callback) {
 		ctx.stroke();
 
 		ctx.font = "10px sans-serif";
-	    ctx.fillText(vertical_scale + ' ms', width_graphic +5 +correction, 10 +correction);
-		ctx.fillText(Math.round(vertical_scale/2) + ' ms', width_graphic +5 +correction, Math.round(height_graphic/2) +correction);
-		ctx.fillText('0 ms', width_graphic +5 +correction, height_graphic -5 +correction);
+	    ctx.fillText(vertical_scale + ' %', width_graphic +5 +correction, 10 +correction);
+		ctx.fillText(Math.round(vertical_scale/2) + ' %', width_graphic +5 +correction, Math.round(height_graphic/2) +correction);
+		ctx.fillText('0 %', width_graphic +5 +correction, height_graphic -5 +correction);
 
 		var sec_per_pixel = ping_interval/1000;
 		var sec_total = width_graphic * sec_per_pixel;
