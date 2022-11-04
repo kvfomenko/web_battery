@@ -1,4 +1,4 @@
-	var timeout = 1005; //ms
+	var timeout = 500; //ms
 	var vertical_scale = 100; //percents
 	var width_timing = 50;  // right legend size px
 	var height_timing = 20;  // bottom legend size px
@@ -13,13 +13,20 @@ function GetLevel(source, callback) {
 		type: "GET",
 		dataType: "json",
 		url: source + "?" + (+new Date()),
-		complete: function(data) {
+		success: function(data) {
 			var res = JSON.parse(data.responseText);
 			console.log('data.responseText: ' + data.responseText);
 			if (typeof callback === "function") {
 				return callback(null, res.level);
 			}
-		}
+		},
+		error: function(e) {
+			console.log('error: ' + JSON.stringify(e));
+			if (typeof callback === "function") {
+				return callback('error', null);
+			}
+		},
+		timeout: timeout
 	});
 }
 
@@ -118,8 +125,10 @@ Ping.prototype.ping = function(source, callback) {
 		var height_graphic = height -height_timing;
 		var imageData = ctx.getImageData(2, 1, width_graphic +1, height_graphic -2);
 		ctx.putImageData(imageData, 1, 1);
-		drawLine(ctx, level, width_graphic, height_graphic);
-		drawDL(ctx);
+		if (level) {
+			drawLine(ctx, level, width_graphic, height_graphic);
+			drawDL(ctx);
+		}
 	}
 
 	function savePing(name, level) {
@@ -167,7 +176,9 @@ Ping.prototype.ping = function(source, callback) {
 		var oldest_i = Math.min(p.length-1, width-width_timing);
 		console.log(name + ' oldest_i -> ' + oldest_i);
 		for (var i = oldest_i; i >= 0; i--) {
-			drawLine(ctx, p[i], width -width_timing -i, height -height_timing);
+			if (p[i]) {
+				drawLine(ctx, p[i], width -width_timing -i, height -height_timing);
+			}
 		};
 		if (p.length > 0) {
 			$('#span_' + name).html(p[0] + '%');
