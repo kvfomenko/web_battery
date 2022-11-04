@@ -123,7 +123,7 @@ Ping.prototype.ping = function(source, callback) {
 	}
 
 	function savePing(name, level) {
-		var p_data = localStorage.getItem('ping_' + name);
+		var p_data = localStorage.getItem('bat_ping_' + name);
 		if (p_data) {
 			var p = JSON.parse(p_data);
 		} else {
@@ -135,11 +135,11 @@ Ping.prototype.ping = function(source, callback) {
 		}
 
 		//console.log('ping_' + name + ':=' + JSON.stringify(p));
-		localStorage.setItem('ping_' + name, JSON.stringify(p));
+		localStorage.setItem('bat_ping_' + name, JSON.stringify(p));
 	}
 
 	function fillMissedData(name, ping_interval) {
-		var t1 = localStorage.getItem('time_' + name);
+		var t1 = localStorage.getItem('bat_time_' + name);
 		if (t1 > 0) {
 			var t2 = new Date().getTime();
 			var missed_sec = (t2-t1)/1000;
@@ -155,7 +155,7 @@ Ping.prototype.ping = function(source, callback) {
 	}
 
 	function loadAndDrawPing(name, ctx, width, height) {
-		var p_data = localStorage.getItem('ping_' + name);
+		var p_data = localStorage.getItem('bat_ping_' + name);
 		console.log('LOADING... ' + name + ':' + p_data);
 
 		if (p_data) {
@@ -179,7 +179,7 @@ Ping.prototype.ping = function(source, callback) {
 		var height_graphic = height -height_timing;
 
 		if (rel_name) {
-			var p_data = localStorage.getItem('ping_' + rel_name);
+			var p_data = localStorage.getItem('bat_ping_' + rel_name);
 			if (p_data) {
 				var p = JSON.parse(p_data);
 			} else {
@@ -202,7 +202,7 @@ Ping.prototype.ping = function(source, callback) {
 			savePing(name, level);
 			drawPing(ctx, level, width, height);
 			var n = new Date().getTime();
-			localStorage.setItem('time_' + name, n);
+			localStorage.setItem('bat_time_' + name, n);
 
 		} else {
 			GetLevel(src, function(err, level) {
@@ -211,7 +211,7 @@ Ping.prototype.ping = function(source, callback) {
 				savePing(name, level);
 				drawPing(ctx, level, width, height);
 				var n = new Date().getTime();
-				localStorage.setItem('time_' + name, n);
+				localStorage.setItem('bat_time_' + name, n);
 			});
 
 			/*var p = new Ping();
@@ -300,7 +300,7 @@ Ping.prototype.ping = function(source, callback) {
 
 
 	function renderPingGraphic(name, imgsrc, ping_interval, width, height, rel_name) {
-		localStorage.setItem('interval_' + name, ping_interval);
+		localStorage.setItem('bat_interval_' + name, ping_interval);
 		document.write(name + ' last ping: <span id="span_' + name + '"></span><br/>');
 		document.write('<canvas id="canvas_' + name + '" width="' + width + '" height="' + height + '"></canvas>');
 		var c = document.getElementById('canvas_' + name);
@@ -308,7 +308,7 @@ Ping.prototype.ping = function(source, callback) {
 		drawIni(ctx, ping_interval, width, height);
 		fillMissedData(name,ping_interval);
 		loadAndDrawPing(name, ctx, width, height)
-		var rel_interval = localStorage.getItem('interval_' + rel_name);
+		var rel_interval = localStorage.getItem('bat_interval_' + rel_name);
 		var rel_rate = ping_interval/rel_interval;
 		setInterval(() => pingAndDraw(name, imgsrc, ctx, width, height, rel_name, rel_rate), ping_interval);
 	};
