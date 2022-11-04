@@ -1,9 +1,9 @@
 	var timeout = 1005; //ms
-	var vertical_scale = 1000; //ms
+	var vertical_scale = 100; //percents
 	var width_timing = 50;  // right legend size px
 	var height_timing = 20;  // bottom legend size px
-	var threshold_orange = 500; //ms
-	var threshold_red = 1000; //ms
+	var threshold_orange = 40; //percent
+	var threshold_red = 10; //percent
 	var correction = 0.5; // https://javascript.ru/forum/misc/34133-canvas-tolshhina-linii.html
 	var store_pings = 500; //count of pings stored in localstorage
 
@@ -82,36 +82,43 @@ Ping.prototype.ping = function(source, callback) {
 	}
 
 	self.img.src = source + "?" + (+new Date()); // Trigger image load with cache buster
-;
+};
 */
-
-	function drawLine(ctx, ms, position, height_graphic) {
-	if (ms >= 0) {
-		if (ms >= threshold_red) {
+	function drawLine(ctx, level, position, height_graphic) {
+	  var is_charging = 1;
+	  if (level < 0) {
+		level = -level;
+		is_charging = 0;
+	  }
+	  if (is_charging == 0) {
+		if (level <= threshold_red) {
 			ctx.strokeStyle = 'red';
-		} else if (ms >= threshold_orange) {
+		} else if (level <= threshold_orange) {
 			ctx.strokeStyle = 'orange';
 		} else {
-			ctx.strokeStyle = 'limegreen';
+			ctx.strokeStyle = 'blue';
 		}
+	  } else {
+		ctx.strokeStyle = 'limegreen';
+	  }
 
 		ctx.beginPath();
 		ctx.lineWidth = 1;
 		ctx.setLineDash([0]);
 		ctx.moveTo(position +correction, height_graphic -2 +correction);
-		let h = ms/vertical_scale * (height_graphic -2);
+		if (level > 100) {level = 100};
+		let h = level/vertical_scale * (height_graphic -2);
 		if (h > height_graphic -2) {h = height_graphic -2};
 		ctx.lineTo(position +correction, height_graphic -2 - h+1 +correction);
 		ctx.stroke();
 	}
-	}
 
-	function drawPing(ctx, ms, width, height) {
+	function drawPing(ctx, level, width, height) {
 		var width_graphic = width -width_timing;
 		var height_graphic = height -height_timing;
 		var imageData = ctx.getImageData(2, 1, width_graphic +1, height_graphic -2);
 		ctx.putImageData(imageData, 1, 1);
-		drawLine(ctx, ms, width_graphic, height_graphic);
+		drawLine(ctx, level, width_graphic, height_graphic);
 		drawDL(ctx);
 	}
 
