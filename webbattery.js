@@ -14,7 +14,7 @@ function GetLevel(source, callback) {
 		dataType: "json",
 		url: source + "?" + (+new Date()),
 		success: function(data) {
-			console.log('data.responseText: ' + data.responseText);
+			console.log(source + ', responseText: ' + data.responseText);
 			if (data.responseText) {
 				var res = JSON.parse(data.responseText);
 				if (typeof callback === "function") {
