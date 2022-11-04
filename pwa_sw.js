@@ -1,4 +1,4 @@
-var cacheName = 'web-ping-pwa';
+var cacheName = 'web-battery-pwa';
 var filesToCache = [
   '/web_battery/',
   '/web_battery/index.html',
@@ -35,3 +35,4 @@ self.addEventListener('fetch', function(e) {
     )
   );
 });
+
