@@ -25,7 +25,7 @@ for (const iface in interfaces) {
 http.createServer(function (req, res) {
 	main_gateway(req, res);
 }).listen(MAIN_PORT_START);
-console.log('Battery main-service listening for ' + hostname + ' on http://' + localaddress + ':' + port);
+console.log('Battery main-service listening for ' + hostname + ' on http://' + localaddress + ':' + MAIN_PORT_START);
 
 for (var port_i=1; port_i<=PROXY_PORTS_COUNT; port_i++) {
 	http.createServer(function (req, res) {
@@ -47,9 +47,8 @@ function main_gateway(request, response) {
 
 function proxy_gateway(request, response) {
 	var url_parsed = url.parse(request.url, true);
-	console.log('proxy request:' + JSON.stringify(url_parsed.query));
 
-	callback = function(response) {
+	var callback = function(response) {
 		var resp_data = '';
 		response.on('data', function (chunk) {
 			resp_data += chunk;
@@ -61,7 +60,23 @@ function proxy_gateway(request, response) {
 		});
 	}
 
-	http.request({host: data.url.query.proxytohost, port: MAIN_PORT_START, method: 'GET', path: '/?fromproxy='+hostname}, callback).end();
+	console.log('proxy request to: ' + url_parsed.query.proxytohost + ':' + MAIN_PORT_START);
+	var req = http.request({host: url_parsed.query.proxytohost, 
+			port: MAIN_PORT_START, 
+			method: 'GET',
+			timeout: 1000, 
+			path: '/?fromproxy='+hostname}, callback).end();
+
+	req.on('timeout', () => {
+		console.log('proxy request timeout');
+	});
+	req.on('error', () => {
+		console.log('proxy request error');
+		req.destroy();
+		var apiData = {error: 'timeout', level: 0, hostname: hostname};
+		generateOutput(apiData, response);
+	});
+
 }
 
 function generateOutput(apiData, response) {
