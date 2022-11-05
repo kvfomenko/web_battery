@@ -6,7 +6,7 @@ const url = require('url');
 
 const LOCAL_NETWORK_MASK = '192.168.0.';
 const MAIN_PORT_START = 3003;
-const PROXY_PORTS_COUNT = 5';
+const PROXY_PORTS_COUNT = 5;
 
 
 var hostname = (process.argv[2]) ? process.argv[2] : os.hostname();
