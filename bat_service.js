@@ -5,12 +5,12 @@ const os = require("os");
 const url = require('url');
 
 const LOCAL_NETWORK_MASK = '192.168.0.';
-const MAIN_PORT_START = 3003;
-const PROXY_PORTS_COUNT = 5;
+const MAIN_PORT = 3003;
+const PROXY_PORT = 3004;
 
 
 var hostname = (process.argv[2]) ? process.argv[2] : os.hostname();
-//var port = (process.argv[3]) ? process.argv[3] : MAIN_PORT_START;
+//var port = (process.argv[3]) ? process.argv[3] : MAIN_PORT;
 var interfaces = os.networkInterfaces();
 var localaddress = '';
 for (const iface in interfaces) {
@@ -24,15 +24,13 @@ for (const iface in interfaces) {
 
 http.createServer(function (req, res) {
 	main_gateway(req, res);
-}).listen(MAIN_PORT_START);
-console.log('Battery main-service listening for ' + hostname + ' on http://' + localaddress + ':' + MAIN_PORT_START);
+}).listen(MAIN_PORT);
+console.log('Battery main-service listening for ' + hostname + ' on http://' + localaddress + ':' + MAIN_PORT);
 
-for (var port_i=1; port_i<=PROXY_PORTS_COUNT; port_i++) {
-	http.createServer(function (req, res) {
-		proxy_gateway(req, res);
-	}).listen(MAIN_PORT_START+port_i);
-	console.log('Battery proxy-service listening for ' + hostname + ' on http://' + localaddress + ':' + (MAIN_PORT_START+port_i));
-}
+http.createServer(function (req, res) {
+	proxy_gateway(req, res);
+}).listen(PROXY_PORT);
+console.log('Battery proxy-service listening for ' + hostname + ' on http://' + localaddress + ':' + (PROXY_PORT));
 
 
 function main_gateway(request, response) {
@@ -60,9 +58,9 @@ function proxy_gateway(request, response) {
 		});
 	}
 
-	console.log('proxy request to: ' + url_parsed.query.proxytohost + ':' + MAIN_PORT_START);
+	console.log('proxy request to: ' + url_parsed.query.proxytohost + ':' + MAIN_PORT);
 	var req = http.request({host: url_parsed.query.proxytohost, 
-			port: MAIN_PORT_START, 
+			port: MAIN_PORT, 
 			method: 'GET',
 			timeout: 1000, 
 			path: '/?fromproxy='+hostname}, callback).end();
@@ -82,7 +80,7 @@ function proxy_gateway(request, response) {
 function generateOutput(apiData, response) {
 	response.setHeader('Content-Type', 'application/json');
 	response.setHeader('Access-Control-Allow-Headers', 'User-Agent, Accept-Language, Content-Type, Content-Length, Connection, Date, Set-Cookie');
-	response.setHeader('Access-Control-Allow-Methods', 'GET');
+	response.setHeader('Access-Control-Allow-Methods', 'GET,POST');
 	response.setHeader('Access-Control-Allow-Origin', '*');
 	response.end(JSON.stringify(apiData));
 };
