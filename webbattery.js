@@ -1,4 +1,4 @@
-	var timeout = 500; //ms
+	var timeout = 2000; //ms
 	var vertical_scale = 100; //percents
 	var width_timing = 50;  // right legend size px
 	var height_timing = 20;  // bottom legend size px
