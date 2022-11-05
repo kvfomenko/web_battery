@@ -12,7 +12,7 @@ function GetLevel(source, callback) {
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: source + "?" + (+new Date()),
+		url: source, // + "?" + (+new Date()),
 		success: function(data) {
 			console.log(source, 'responseText', data);
 			if (data) {
