@@ -25,7 +25,7 @@
 
 	window.onload = () => {
         if ('serviceWorker' in navigator) {
-		//navigator.serviceWorker.register('/web_battery/pwa_sw.js');
+		navigator.serviceWorker.register('/web_battery/pwa_sw.js');
         }
     }
 
@@ -65,7 +65,7 @@
 		var p = get();
 		if (p.length === 0) {
 			set(0, "Dell", "http://localhost:3003");
-			set(1, "Asus", "http://192.168.0.93:3003");
+			//set(1, "Asus", "http://192.168.0.93:3003");
 		}
 	}
 
@@ -97,7 +97,7 @@
 	<label for="title" class="msg">Add remote server: Title</label>
 	<input class="form-control" type="text" id="title" name="url" placeholder="title">&nbsp;&nbsp;
 	<label for="url" class="msg">Address</label>
-	<input class="form-control" type="text" id="url" name="url" placeholder="url to battery service" size="50" value="http://192.168.0.1:3003">
+	<input class="form-control" type="text" id="url" name="url" placeholder="url to battery service" size="50" value="http://localhost:3004/?proxytohost192.168.0.93">
 	</form>
 </td>
 <td align="right">
