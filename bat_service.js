@@ -48,13 +48,13 @@ function main_gateway(request, response) {
 function proxy_gateway(request, response) {
 	var url_parsed = url.parse(request.url, true);
 
-	var callback = function(response) {
+	var callback = function(response2) {
 		var resp_data = '';
-		response.on('data', function (chunk) {
+		response2.on('data', function (chunk) {
 			resp_data += chunk;
 		});
-		response.on('end', function () {
-			resp_json = JSON.parse(resp_data);
+		response2.on('end', function () {
+			var resp_json = JSON.parse(resp_data);
 			var apiData = {level: resp_json.level, hostname: resp_json.hostname};
 			generateOutput(apiData, response);
 		});
