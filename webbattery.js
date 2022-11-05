@@ -25,7 +25,7 @@ function GetLevel(source, callback) {
 			}
 		},
 		error: function(e) {
-			console.log('error: ' + JSON.stringify(e));
+			console.log(source + ' error: ' + JSON.stringify(e));
 			if (typeof callback === "function") {
 				return callback('error', null);
 			}
